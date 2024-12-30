@@ -8,21 +8,20 @@ on:
         type: string
 
 jobs:
-  run-workflow:
+  check-branch:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Checkout Code
+      - name: Checkout code
         uses: actions/checkout@v3
 
-      - name: Check if branch is 'main'
-        if: ${{ inputs.branch == 'refs/heads/main' }}
+      - name: Ensure we are on the main branch
+        if: ${{ inputs.branch == 'main' }}  # Check if the branch is 'main'
         run: |
-          echo "This is the main branch. Proceeding with the workflow."
-          # Your workflow logic goes here
-
-      - name: Fail if not 'main'
-        if: ${{ inputs.branch != 'refs/heads/main' }}
+          echo "The workflow is running on the main branch."
+        
+      - name: Fail if not on main branch
+        if: ${{ inputs.branch != 'main' }}  # If branch is not 'main', this step will fail
         run: |
-          echo "This workflow only runs on the main branch."
-          exit 1
+          echo "This workflow can only run on the main branch."
+          exit 1  # Fail the job if it's not the main branch
