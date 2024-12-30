@@ -1,0 +1,28 @@
+name: Reusable Workflow
+
+on:
+  workflow_call:
+    inputs:
+      branch:
+        required: true
+        type: string
+
+jobs:
+  run-workflow:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v3
+
+      - name: Check if branch is 'main'
+        if: ${{ inputs.branch == 'refs/heads/main' }}
+        run: |
+          echo "This is the main branch. Proceeding with the workflow."
+          # Your workflow logic goes here
+
+      - name: Fail if not 'main'
+        if: ${{ inputs.branch != 'refs/heads/main' }}
+        run: |
+          echo "This workflow only runs on the main branch."
+          exit 1
